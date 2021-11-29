@@ -6,9 +6,13 @@ SELECT * FROM salaries;
 SELECT * FROM dept_employees;
 SELECT * FROM titles;
 
+
+
 --
 -- QUERY DATES
 --
+
+
 
 -- SELECT THE EMPLOYEES READY FOR RETIREMENT
 SELECT first_name, last_name 
@@ -40,13 +44,13 @@ SELECT first_name, last_name
 FROM employees
 WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31') AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
 
--- Number of employees retiring
+-- NUMBER OF EMPLOYEES RETIRING
 SELECT COUNT(first_name)
 FROM employees
 WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
 
--- Save the employees ready for retirement into a new table
+-- SAVE THE EMPLOYEES READY FOR RETIREMENT INTO A NEW TABLE
 SELECT emp_no, first_name, last_name
 INTO retirement_info
 FROM employees
@@ -55,11 +59,9 @@ AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
 
 SELECT * FROM retirement_info;
 
---
--- JOINS IN ACTION
---
 
--- Joining departments and dept_manager tables
+-- JOINS IN ACTION
+-- JOINING departments AND dept_manager TABLES
 SELECT departments.dept_name,
      dept_manager.emp_no,
      dept_manager.from_date,
@@ -68,23 +70,37 @@ FROM departments
 INNER JOIN dept_manager
 ON departments.dept_no = dept_manager.dept_no;
 
--- Add to_date column to retirement_info table by
+-- ADD to_date COLUMN to retirement_info table by
 -- joining retirement_info and dept_emp tables
-SELECT RETIREMENT_INFO.EMP_NO,
-	RETIREMENT_INFO.FIRST_NAME,
-	RETIREMENT_INFO.LAST_NAME,
-	DEPT_EMPLOYEES.TO_DATE
-FROM RETIREMENT_INFO
-LEFT JOIN DEPT_EMPLOYEES ON RETIREMENT_INFO.EMP_NO = DEPT_EMPLOYEES.EMP_NO;
+SELECT retirement_info.emp_no,
+	retirement_info.first_name,
+	retirement_info.last_name,
+	dept_employees.to_date
+FROM retirement_info
+LEFT JOIN dept_employees ON retirement_info.emp_no = dept_employees.emp_no;
 
--- Use Aliases for the JOIN
-SELECT RI.EMP_NO,
-	RI.FIRST_NAME,
-	RI.LAST_NAME,
-	DE.TO_DATE
-INTO CURRENT_EMP -- add the data into current_emp (new table)
-FROM RETIREMENT_INFO AS RI
-LEFT JOIN DEPT_EMPLOYEES AS DE ON RI.EMP_NO = DE.EMP_NO
+-- USE ALIASES FOR THE JOIN
+SELECT ri.emp_no,
+	ri.first_name,
+	ri.last_name,
+	de.to_date
+INTO current_emp -- add the data into current_emp (new table)
+FROM retirement_info AS ri
+LEFT JOIN dept_employees AS de ON ri.emp_no = de.emp_no
 WHERE de.to_date = ('9999-01-01'); -- filter eployees that continue working in PH
 
-SELECT * FROM CURRENT_EMP;
+SELECT * FROM current_emp;
+
+
+
+--- USE COUNT, GROUP BY, AND ORDER BY
+-- Employee count by department number
+SELECT COUNT(ce.emp_no), de.dept_no
+INTO count_dept
+FROM current_emp as ce
+LEFT JOIN dept_employees as de
+ON ce.emp_no = de.emp_no
+GROUP BY de.dept_no
+ORDER BY de.dept_no;
+
+SELECT * FROM count_dept;
