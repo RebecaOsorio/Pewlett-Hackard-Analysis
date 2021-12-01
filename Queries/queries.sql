@@ -36,7 +36,7 @@ AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
 
 -- SAVE THE EMPLOYEES READY FOR RETIREMENT INTO A NEW TABLE
 SELECT emp_no, first_name, last_name
-INTO retirement_info
+INTO retirement_info -- the new table
 FROM employees
 WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
@@ -87,13 +87,13 @@ SELECT * FROM count_dept;
 ------------------------------------------
 -- LIST 1: EMPLOYEE INFORMATION
 
--- METHOD. USE CURRENT_EMPLOYE TABLE (employees ready for retirement) AND JOIN THE SALARY
+-- METHOD: USE CURRENT_EMPLOYE TABLE (employees ready for retirement) AND JOIN THE SALARY
 SELECT ce.emp_no, ce.last_name, ce.first_name, em.gender, sal.salary
 FROM current_emp as ce
 INNER JOIN employees as em ON em.emp_no = ce.emp_no
 INNER JOIN salaries as sal ON em.emp_no = sal.emp_no;
 
--- METHOD. CREATE A NEW TABLE, FILTER AND JOIN THE SALARIES
+-- METHOD: CREATE A NEW TABLE, FILTER AND JOIN THE SALARIES
 SELECT e.emp_no,
     e.first_name,
 		e.last_name,
@@ -125,7 +125,7 @@ INNER JOIN employees AS em ON mg.emp_no=em.emp_no;
 	
 
 ------------------------------------------
--- LIST 3:
+-- LIST 3: Department Retirees
 SELECT ce.emp_no,
 	ce.first_name,
 	ce.last_name,
